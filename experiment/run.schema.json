@@ -1,0 +1,76 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/xju2/agent-env-frnn/experiment/run.schema.json",
+  "title": "FRNN autonomous optimization run",
+  "type": "object",
+  "required": ["schema_version", "run_id", "treatment", "inputs", "environment", "budget", "timestamps", "outcome"],
+  "properties": {
+    "schema_version": {"const": "1.0.0"},
+    "run_id": {"type": "string", "minLength": 1},
+    "treatment": {
+      "type": "object",
+      "required": ["framework", "framework_version", "model", "reasoning", "repetition", "command"],
+      "properties": {
+        "framework": {"type": "string"},
+        "framework_version": {"type": ["string", "null"]},
+        "model": {"type": "string"},
+        "model_version": {"type": ["string", "null"]},
+        "reasoning": {"type": ["string", "null"]},
+        "repetition": {"type": "integer", "minimum": 1},
+        "command": {"type": "array", "items": {"type": "string"}},
+        "permissions": {"type": ["object", "null"]},
+        "network_policy": {"type": ["object", "null"]},
+        "context_policy": {"type": ["object", "null"]}
+      }
+    },
+    "inputs": {
+      "type": "object",
+      "required": ["upstream_repository", "upstream_commit", "source_manifest_sha256", "goal_sha256", "datasets"],
+      "properties": {
+        "upstream_repository": {"type": "string", "format": "uri"},
+        "upstream_commit": {"type": "string", "pattern": "^[0-9a-f]{40}$"},
+        "source_manifest_sha256": {"type": "string"},
+        "goal_sha256": {"type": "string"},
+        "datasets": {"type": "array", "items": {"type": "object"}}
+      }
+    },
+    "environment": {
+      "type": "object",
+      "required": ["image_ref", "host", "gpu", "toolchain"],
+      "properties": {
+        "image_ref": {"type": ["string", "null"]},
+        "host": {"type": "object"},
+        "gpu": {"type": "object"},
+        "toolchain": {"type": "object"}
+      }
+    },
+    "budget": {
+      "type": "object",
+      "required": ["wall_seconds_limit", "includes_build_and_evaluation"],
+      "properties": {
+        "wall_seconds_limit": {"type": "integer", "minimum": 1},
+        "includes_build_and_evaluation": {"const": true},
+        "tokens": {"type": ["object", "null"]},
+        "cost_usd": {"type": ["number", "null"], "minimum": 0}
+      }
+    },
+    "timestamps": {"type": "object", "required": ["started_at", "finished_at"]},
+    "human_interventions": {"type": "array", "items": {"type": "object"}},
+    "outcome": {
+      "type": "object",
+      "required": ["status", "termination_reason", "return_code", "wall_seconds", "output_commit", "correctness", "performance"],
+      "properties": {
+        "status": {"enum": ["running", "completed", "failed", "timed_out"]},
+        "termination_reason": {"type": ["string", "null"]},
+        "return_code": {"type": ["integer", "null"]},
+        "wall_seconds": {"type": ["number", "null"], "minimum": 0},
+        "output_commit": {"type": ["string", "null"]},
+        "correctness": {"type": ["object", "null"]},
+        "performance": {"type": ["object", "null"]}
+      }
+    },
+    "artifacts": {"type": "array", "items": {"type": "object"}},
+    "notes": {"type": ["string", "null"]}
+  },
+  "additionalProperties": true
+}

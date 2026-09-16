@@ -1,0 +1,7 @@
+.git
+build
+runs
+**/__pycache__
+**/*.pyc
+workspace/build
+workspace/data/*.csv

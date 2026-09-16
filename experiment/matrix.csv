@@ -1,0 +1,8 @@
+arm_id,framework,framework_version,model,model_version,reasoning,repetition,wall_seconds_limit,automation_mode,source_commit,base_image_id,status
+claude-sonnet-5-medium-r1,Claude Code,TO_RECORD,Sonnet 5,TO_RECORD,medium,1,18000,autonomous,5ce9f21e2a2f12edfc5734fdd31973098a2f8d6d,TO_RECORD,planned
+claude-sonnet-5-medium-r2,Claude Code,TO_RECORD,Sonnet 5,TO_RECORD,medium,2,18000,autonomous,5ce9f21e2a2f12edfc5734fdd31973098a2f8d6d,TO_RECORD,lower-priority
+codex-gpt-5-6-sol-medium-r1,Codex,TO_RECORD,gpt-5.6-sol,TO_RECORD,medium,1,18000,autonomous,5ce9f21e2a2f12edfc5734fdd31973098a2f8d6d,TO_RECORD,planned
+codex-gpt-5-6-sol-medium-r2,Codex,TO_RECORD,gpt-5.6-sol,TO_RECORD,medium,2,18000,autonomous,5ce9f21e2a2f12edfc5734fdd31973098a2f8d6d,TO_RECORD,lower-priority
+codex-gpt-6-astra-medium-r1,Codex,TO_RECORD,gpt-6-astra,TO_RECORD,medium,1,18000,autonomous,5ce9f21e2a2f12edfc5734fdd31973098a2f8d6d,TO_RECORD,planned
+codex-gpt-6-astra-medium-r2,Codex,TO_RECORD,gpt-6-astra,TO_RECORD,medium,2,18000,autonomous,5ce9f21e2a2f12edfc5734fdd31973098a2f8d6d,TO_RECORD,lower-priority
+manual-ai-guided-r1,Manual plus AI,TO_RECORD,TO_RECORD,TO_RECORD,TO_RECORD,1,18000,human-directed,5ce9f21e2a2f12edfc5734fdd31973098a2f8d6d,TO_RECORD,planned

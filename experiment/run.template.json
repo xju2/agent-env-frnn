@@ -1,0 +1,48 @@
+{
+  "schema_version": "1.0.0",
+  "run_id": "codex-gpt-5-6-sol-medium-r1",
+  "treatment": {
+    "framework": "Codex",
+    "framework_version": "RECORD_EXACT_CLI_VERSION",
+    "model": "gpt-5.6-sol",
+    "model_version": null,
+    "reasoning": "medium",
+    "repetition": 1,
+    "command": ["RECORD", "EXACT", "ARGV"],
+    "permissions": null,
+    "network_policy": null,
+    "context_policy": null
+  },
+  "inputs": {
+    "upstream_repository": "https://github.com/xju2/libFRNN",
+    "upstream_commit": "5ce9f21e2a2f12edfc5734fdd31973098a2f8d6d",
+    "source_manifest_sha256": "AUTO_CAPTURED",
+    "goal_sha256": "AUTO_CAPTURED",
+    "datasets": []
+  },
+  "environment": {
+    "image_ref": "RECORD_DERIVED_IMAGE_DIGEST",
+    "host": {},
+    "gpu": {},
+    "toolchain": {}
+  },
+  "budget": {
+    "wall_seconds_limit": 18000,
+    "includes_build_and_evaluation": true,
+    "tokens": null,
+    "cost_usd": null
+  },
+  "timestamps": {"started_at": null, "finished_at": null},
+  "human_interventions": [],
+  "outcome": {
+    "status": "running",
+    "termination_reason": null,
+    "return_code": null,
+    "wall_seconds": null,
+    "output_commit": null,
+    "correctness": null,
+    "performance": null
+  },
+  "artifacts": [],
+  "notes": null
+}

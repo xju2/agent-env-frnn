@@ -1,0 +1,175 @@
+{
+  "schema_version": "1.0.0",
+  "upstream_repository": "https://github.com/xju2/libFRNN",
+  "upstream_commit": "5ce9f21e2a2f12edfc5734fdd31973098a2f8d6d",
+  "upstream_commit_date": "2026-07-25T16:53:00Z",
+  "upstream_commit_message": "add benchmark-only pipeline stage timing",
+  "vendored_at": "workspace/",
+  "files": [
+    {
+      "path": ".gitignore",
+      "mode": "100644",
+      "blob_sha": "a648a03d16940f69e71029f5e2e25f61c4a11a70"
+    },
+    {
+      "path": "benchmarks/frnn_benchmark.cu",
+      "mode": "100644",
+      "blob_sha": "c8a4acee876ceccd8ae3a1191e329fba9eada018"
+    },
+    {
+      "path": "benchmarks/results/baseline_a35c713.csv",
+      "mode": "100644",
+      "blob_sha": "3b6def938adc9a022b2eb1edbc62138c2bb6a5a3"
+    },
+    {
+      "path": "benchmarks/results/experiment_bruteforce_dispatch.csv",
+      "mode": "100644",
+      "blob_sha": "53bdc1c021bdeda401d62426bc808020bb1d275a"
+    },
+    {
+      "path": "benchmarks/results/experiment_distance_early_exit.csv",
+      "mode": "100644",
+      "blob_sha": "840b0a25ac5fc78a5ac87fcc4da36d69e6a1c8e1"
+    },
+    {
+      "path": "benchmarks/results/experiment_lazy_neighbor_init.csv",
+      "mode": "100644",
+      "blob_sha": "7cb460d31f225529b5391be281c18053a74ca7e3"
+    },
+    {
+      "path": "benchmarks/results/final_2a5da29.csv",
+      "mode": "100644",
+      "blob_sha": "bac3a83c981c7380708ac1541716822e58f15476"
+    },
+    {
+      "path": "benchmarks/results/final_real_2a5da29.csv",
+      "mode": "100644",
+      "blob_sha": "24db0979747b9d7d979ea18e153bd118c0c83967"
+    },
+    {
+      "path": "benchmarks/results/matrix_current.csv",
+      "mode": "100644",
+      "blob_sha": "01ec6dda520ee82d3120e3b66d0a24131952fa5e"
+    },
+    {
+      "path": "benchmarks/results/matrix_hybrid24.csv",
+      "mode": "100644",
+      "blob_sha": "2e47998b035f3d161d86f918d8a79608d155ea39"
+    },
+    {
+      "path": "benchmarks/results/real_device_current.csv",
+      "mode": "100644",
+      "blob_sha": "3e2919480d4e3b5011932fd9b357f59d1b61e6a5"
+    },
+    {
+      "path": "benchmarks/results/real_device_heap.csv",
+      "mode": "100644",
+      "blob_sha": "54375e7c443d0613b19bde4747d86dbea160d4cb"
+    },
+    {
+      "path": "benchmarks/results/real_device_hybrid_heap.csv",
+      "mode": "100644",
+      "blob_sha": "24fc91e2dc4ce31768b4f28477f5e0faba9a3b1d"
+    },
+    {
+      "path": "benchmarks/results/real_device_hybrid24.csv",
+      "mode": "100644",
+      "blob_sha": "3dd1e6d4a6291ca606a5451e197551f4217c058c"
+    },
+    {
+      "path": "CMakeLists.txt",
+      "mode": "100644",
+      "blob_sha": "c1439141d8da95acefb36386d55730e02c795ab9"
+    },
+    {
+      "path": "Config.cmake.in",
+      "mode": "100644",
+      "blob_sha": "daf4e0070a7ceaecf989f2ad4da7caaece3854b4"
+    },
+    {
+      "path": "docs/optimization_log.md",
+      "mode": "100644",
+      "blob_sha": "00e41dc80ad2f44ea327076fa6a0fda672d836d2"
+    },
+    {
+      "path": "docs/optimize_compute.md",
+      "mode": "100644",
+      "blob_sha": "95f47a8a8dc4f9a60b8314c9a02220dd9de8ad65"
+    },
+    {
+      "path": "docs/performance_report.md",
+      "mode": "100644",
+      "blob_sha": "d5e41799d9e121c2c001a62350e74e3a2ea08710"
+    },
+    {
+      "path": "docs/remove_torch_dep.md",
+      "mode": "100644",
+      "blob_sha": "16d8662679744a3291947939c45493d9470f2bd7"
+    },
+    {
+      "path": "LICENSE",
+      "mode": "100644",
+      "blob_sha": "261eeb9e9f8b2b4b0d119366dda99c6fd7d35c64"
+    },
+    {
+      "path": "pyproject.toml",
+      "mode": "100644",
+      "blob_sha": "a39bdf56ba2ae75242c0bfbf8376f9d139ca53ba"
+    },
+    {
+      "path": "python/bindings.cpp",
+      "mode": "100644",
+      "blob_sha": "c9586cc9b8e110b3498e6579a65e47001dbcc6e7"
+    },
+    {
+      "path": "python/frnn/__init__.py",
+      "mode": "100644",
+      "blob_sha": "d729d129da0e43b56b2a1e8a47bcaeb3249c65ba"
+    },
+    {
+      "path": "README.md",
+      "mode": "100644",
+      "blob_sha": "9433994c922658b52bba2f036928802edd1d8c3a"
+    },
+    {
+      "path": "src/frnn.cu",
+      "mode": "100644",
+      "blob_sha": "b64f0ed86be6cb5844ad404bd18fdad650005751"
+    },
+    {
+      "path": "src/include/frnn/build_edges.hpp",
+      "mode": "100644",
+      "blob_sha": "196c02436b8a4b0ec5ac953731b458d325489a23"
+    },
+    {
+      "path": "src/include/frnn/frnn.hpp",
+      "mode": "100644",
+      "blob_sha": "108913ac42ba4892b0305ed69d12d05eac5af10d"
+    },
+    {
+      "path": "tests/compare_reference_edges.py",
+      "mode": "100755",
+      "blob_sha": "3ff4365242d0cb7e27b5af43dc2445ce6034d8e9"
+    },
+    {
+      "path": "tests/consumer/CMakeLists.txt",
+      "mode": "100644",
+      "blob_sha": "fe66b442cd60a9f1c7412bded6dca9b3a2c0f157"
+    },
+    {
+      "path": "tests/consumer/main.cpp",
+      "mode": "100644",
+      "blob_sha": "26d8c8f7c12acfcd1a553705e69d694cba48783f"
+    },
+    {
+      "path": "tests/test_frnn.cpp",
+      "mode": "100644",
+      "blob_sha": "582e0bbd2e66e9a38c9369c8d3f26446d893b5fa"
+    },
+    {
+      "path": "tests/test_python.py",
+      "mode": "100644",
+      "blob_sha": "71be35f0bb40e2b978ff8f6e0741619360a74879"
+    }
+  ]
+}
