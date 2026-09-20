@@ -42,7 +42,10 @@ Use one immutable directory under `runs/` per attempt. `run-frnn-experiment` cre
 - `goal.txt`: the exact prompt shown to the agent;
 - `transcript.log`: combined stdout/stderr from the autonomous process;
 - `events.jsonl`: machine-readable lifecycle events;
-- `result.patch`: the final diff from the clean checkpoint.
+- `result.patch`: the complete baseline-to-final diff, including committed and uncommitted changes;
+- `repository.bundle`: the complete reachable Git commit history and refs, including `HEAD`;
+- `worktree.patch`: uncommitted changes relative to the final `HEAD`;
+- `git-log.txt`: the decorated, full-format commit history with ISO-8601 dates.
 
 A typical invocation inside the container is:
 
@@ -59,6 +62,18 @@ run-frnn-experiment \
   --image-ref '<derived image digest>' \
   -- <noninteractive agent command and flags>
 ```
+
+To restore the repository after an ephemeral container exits:
+
+```bash
+WORKTREE_PATCH="$(pwd)/runs/<run-id>/worktree.patch"
+git clone runs/<run-id>/repository.bundle recovered-run
+if [[ -s "$WORKTREE_PATCH" ]]; then
+  git -C recovered-run apply --binary "$WORKTREE_PATCH"
+fi
+```
+
+The bundle restores all commits and refs reachable at capture time. The worktree patch then reapplies any changes the agent left uncommitted. An empty `worktree.patch` means the final working tree was clean.
 
 Anything not captured automatically—API token counts/cost, context-compaction policy, permissions, unexpected human intervention, benchmark samples, and correctness results—must be added to `manifest.json` before the record is frozen. The allowed structure is documented in `experiment/run.schema.json`; `experiment/run.template.json` is a filled example. Use `experiment/matrix.csv` as the prospective experiment plan and assign every manifest one of its unique arm IDs.
 

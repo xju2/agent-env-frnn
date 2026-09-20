@@ -40,6 +40,31 @@ def sha256(path: Path) -> str:
     return digest.hexdigest()
 
 
+
+
+def capture_command_output(
+    path: Path, argv: list[str], timeout: int = 120
+) -> dict[str, Any]:
+    """Write stdout exactly as emitted and return command diagnostics."""
+    try:
+        with path.open("wb") as stream:
+            completed = subprocess.run(
+                argv,
+                stdout=stream,
+                stderr=subprocess.PIPE,
+                check=False,
+                timeout=timeout,
+            )
+        stderr = completed.stderr.decode("utf-8", errors="replace").strip()
+        return {
+            "return_code": completed.returncode,
+            "stderr": stderr or None,
+        }
+    except (OSError, subprocess.SubprocessError) as error:
+        path.write_bytes(b"")
+        return {"return_code": None, "stderr": str(error)}
+
+
 def datasets(workspace: Path) -> list[dict[str, Any]]:
     found = []
     for name in ("embedding_data.csv", "edge_list.csv"):
@@ -257,20 +282,89 @@ def main() -> int:
         ["git", "-C", str(workspace), "rev-list", "--max-parents=0", "HEAD"]
     )
     patch_path = run_dir / "result.patch"
-    patch_path.write_text(
-        output(
+    result_patch_capture = capture_command_output(
+        patch_path,
+        [
+            "git",
+            "-C",
+            str(workspace),
+            "diff",
+            "--binary",
+            baseline_commit or "HEAD",
+        ],
+    )
+    worktree_patch_path = run_dir / "worktree.patch"
+    worktree_patch_capture = capture_command_output(
+        worktree_patch_path,
+        ["git", "-C", str(workspace), "diff", "--binary", "HEAD"],
+    )
+    git_log_path = run_dir / "git-log.txt"
+    git_log_capture = capture_command_output(
+        git_log_path,
+        [
+            "git",
+            "-C",
+            str(workspace),
+            "log",
+            "--all",
+            "HEAD",
+            "--date=iso-strict",
+            "--pretty=fuller",
+            "--decorate=full",
+        ],
+    )
+    bundle_path = run_dir / "repository.bundle"
+    try:
+        bundle_process = subprocess.run(
             [
                 "git",
                 "-C",
                 str(workspace),
-                "diff",
-                "--binary",
-                baseline_commit or "HEAD",
-            ]
+                "bundle",
+                "create",
+                str(bundle_path),
+                "--all",
+                "HEAD",
+            ],
+            capture_output=True,
+            text=True,
+            check=False,
+            timeout=120,
         )
-        or "",
-        encoding="utf-8",
-    )
+        bundle_capture: dict[str, Any] = {
+            "return_code": bundle_process.returncode,
+            "stderr": bundle_process.stderr.strip() or None,
+            "verified": False,
+        }
+        if bundle_process.returncode == 0 and bundle_path.is_file():
+            verification = subprocess.run(
+                [
+                    "git",
+                    "-C",
+                    str(workspace),
+                    "bundle",
+                    "verify",
+                    str(bundle_path),
+                ],
+                stdout=subprocess.DEVNULL,
+                stderr=subprocess.PIPE,
+                text=True,
+                check=False,
+                timeout=120,
+            )
+            bundle_capture["verified"] = verification.returncode == 0
+            bundle_capture["verification_stderr"] = (
+                verification.stderr.strip() or None
+            )
+        else:
+            bundle_path.unlink(missing_ok=True)
+    except (OSError, subprocess.SubprocessError) as error:
+        bundle_path.unlink(missing_ok=True)
+        bundle_capture = {
+            "return_code": None,
+            "stderr": str(error),
+            "verified": False,
+        }
     manifest["timestamps"]["finished_at"] = now()
     manifest["outcome"].update(
         {
@@ -285,13 +379,27 @@ def main() -> int:
             "git_status": output(
                 ["git", "-C", str(workspace), "status", "--short"]
             ),
+            "git_capture": {
+                "result_patch": result_patch_capture,
+                "worktree_patch": worktree_patch_capture,
+                "git_log": git_log_capture,
+                "repository_bundle": bundle_capture,
+            },
         }
     )
+    artifact_paths = [
+        goal_copy,
+        transcript_path,
+        events_path,
+        patch_path,
+        worktree_patch_path,
+        git_log_path,
+        bundle_path,
+    ]
     manifest["artifacts"] = [
-        {"path": "goal.txt", "sha256": sha256(goal_copy)},
-        {"path": "transcript.log", "sha256": sha256(transcript_path)},
-        {"path": "events.jsonl", "sha256": sha256(events_path)},
-        {"path": "result.patch", "sha256": sha256(patch_path)},
+        {"path": path.name, "sha256": sha256(path)}
+        for path in artifact_paths
+        if path.is_file()
     ]
     event(
         events_path,
