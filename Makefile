@@ -1,4 +1,4 @@
-IMAGE ?= agent-env-frnn:cuda12.0
+IMAGE ?= agent-env-frnn:cuda13.0-pytorch2.13
 
 .PHONY: image shell smoke verify
 

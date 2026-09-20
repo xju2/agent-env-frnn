@@ -1,10 +1,12 @@
 # syntax=docker/dockerfile:1.7
-ARG CUDA_IMAGE=nvidia/cuda:12.0.1-devel-ubuntu22.04
+ARG CUDA_IMAGE=nvidia/cuda:13.0.1-devel-ubuntu22.04
 FROM ${CUDA_IMAGE}
 
 ARG DEBIAN_FRONTEND=noninteractive
 ARG NODE_VERSION=22.19.0
 ARG NODE_SHA256=c0649af18e6a24f6fe5535a3e86b341dd49a8e71117c8b68bde973ef834f16f2
+ARG PYTORCH_VERSION=2.13.0+cu130
+ARG PYTORCH_INDEX_URL=https://download.pytorch.org/whl/cu130
 
 LABEL org.opencontainers.image.title="FRNN autonomous-agent experiment environment" \
       org.opencontainers.image.source="https://github.com/xju2/agent-env-frnn" \
@@ -18,8 +20,8 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
         ccache \
         cmake \
         curl \
-        cuda-nsight-compute-12-0=12.0.1-1 \
-        cuda-nsight-systems-12-0=12.0.1-1 \
+        cuda-nsight-compute-13-0=13.0.1-1 \
+        cuda-nsight-systems-13-0=13.0.1-1 \
         fd-find \
         gdb \
         git \
@@ -61,9 +63,15 @@ RUN python3 -m pip install --no-cache-dir \
         numpy==1.26.4 \
         pybind11==2.11.1 \
         pytest==8.3.5 \
-        scikit-build-core==0.10.7
+        scikit-build-core==0.10.7 \
+    && python3 -m pip install --no-cache-dir \
+        --index-url "${PYTORCH_INDEX_URL}" \
+        "torch==${PYTORCH_VERSION}" \
+    && python3 -c "import torch; assert torch.__version__ == '${PYTORCH_VERSION}'; assert torch.version.cuda == '13.0'"
 
 ENV CUDAARCHS=75 \
+    EXPECTED_CUDA_VERSION=13.0 \
+    EXPECTED_PYTORCH_VERSION=2.13.0+cu130 \
     CMAKE_BUILD_PARALLEL_LEVEL=8 \
     NVIDIA_DRIVER_CAPABILITIES=compute,utility \
     FRNN_UPSTREAM_COMMIT=5ce9f21e2a2f12edfc5734fdd31973098a2f8d6d \

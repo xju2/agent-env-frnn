@@ -10,22 +10,22 @@ The repository deliberately separates three things:
 
 ## Step 1: build the common environment
 
-The image uses CUDA 12.0.1 on Ubuntu 22.04, targets compute capability 7.5 (`sm_75`) for the GeForce RTX 2070, and includes CMake, Ninja, C/C++, Python, Node.js, Git, Nsight Compute, Nsight Systems, and standard diagnostic tools.
+The image uses CUDA Toolkit 13.0 Update 1 on Ubuntu 22.04 and PyTorch 2.13.0+cu130, matching the paper's benchmark stack. It targets compute capability 7.5 (`sm_75`) for the GeForce RTX 2070 and includes CMake, Ninja, C/C++, Python, Node.js, Git, Nsight Compute, Nsight Systems, and standard diagnostic tools.
 
 Faraday needs a compatible NVIDIA driver, Docker, and NVIDIA Container Toolkit. Build and validate the image on the designated GPU:
 
 ```bash
-docker build --pull --tag agent-env-frnn:cuda12.0 .
+docker build --pull --tag agent-env-frnn:cuda13.0-pytorch2.13 .
 docker run --rm --gpus '"device=0"' \
   -e EXPECTED_GPU_REGEX='RTX 2070' \
   -e EXPECTED_COMPUTE_CAPABILITY=7.5 \
-  agent-env-frnn:cuda12.0 smoke-test-frnn
+  agent-env-frnn:cuda13.0-pytorch2.13 smoke-test-frnn
 ```
 
 Record the immutable local image identity used by every arm (and the registry digest as well if the image is pushed):
 
 ```bash
-docker image inspect agent-env-frnn:cuda12.0 --format '{{.Id}}'
+docker image inspect agent-env-frnn:cuda13.0-pytorch2.13 --format '{{.Id}}'
 ```
 
 Do not install Codex or Claude Code in this common image: the agent framework and version are treatment variables. Build one thin derived image per treatment, pin the CLI version, and retain the same base-image digest. Mount credentials at run time; never bake them into an image or commit them.

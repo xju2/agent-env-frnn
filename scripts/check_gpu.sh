@@ -13,6 +13,32 @@ echo "Driver: ${driver}"
 echo "Compute capability: ${compute_cap:-unknown}"
 nvcc --version
 
+cuda_version="$(nvcc --version | sed -n 's/.*release \([0-9.]*\),.*/\1/p')"
+if [[ -n "${EXPECTED_CUDA_VERSION:-}" && "${cuda_version}" != "${EXPECTED_CUDA_VERSION}" ]]; then
+    echo "Expected CUDA ${EXPECTED_CUDA_VERSION}, found ${cuda_version:-unknown}." >&2
+    exit 1
+fi
+
+python3 - <<'PY'
+import os
+import torch
+
+expected_torch = os.environ.get("EXPECTED_PYTORCH_VERSION")
+expected_cuda = os.environ.get("EXPECTED_CUDA_VERSION")
+print(f"PyTorch: {torch.__version__}")
+print(f"PyTorch CUDA: {torch.version.cuda}")
+if expected_torch and torch.__version__ != expected_torch:
+    raise SystemExit(
+        f"Expected PyTorch {expected_torch}, found {torch.__version__}."
+    )
+if expected_cuda and torch.version.cuda != expected_cuda:
+    raise SystemExit(
+        f"Expected PyTorch CUDA {expected_cuda}, found {torch.version.cuda}."
+    )
+if not torch.cuda.is_available():
+    raise SystemExit("PyTorch cannot access the container GPU.")
+PY
+
 if [[ -n "${EXPECTED_GPU_REGEX:-}" ]] && [[ ! "${gpu_name}" =~ ${EXPECTED_GPU_REGEX} ]]; then
     echo "Expected GPU matching '${EXPECTED_GPU_REGEX}', found '${gpu_name}'." >&2
     exit 1
